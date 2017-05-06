@@ -1,0 +1,38 @@
+*{
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+#content
+{
+    width:100%;
+}
+
+.game-container-style
+{
+    background-color: #ddd;
+    width:600px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.game-table-style
+{
+    width: 100%;
+}
+
+.cell
+{
+    height: 20px;
+    border: 2px outset #ddd;
+}
+
+.bomb
+{
+
+}
+
+.blank
+{
+    
+}
