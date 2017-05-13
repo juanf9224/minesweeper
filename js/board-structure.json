@@ -1,0 +1,11 @@
+{
+    board:{
+        row: 1,
+        cell: 2,
+        leftEle: true,
+        rightEle: true,
+        bottomEle: true,
+        topEle: true,
+        
+    }
+}
