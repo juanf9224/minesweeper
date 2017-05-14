@@ -45,42 +45,87 @@ function findBomb(item){
 }
 
 function workMagic(item){
-    var rowCellArr = item.getAttribute('id').split('_');
+    var itemObject = getItemObject(item);
+
+	console.log('BoardStructure -> '+ JSON.stringify(itemObject));
+    var bombCount =0;
+    if(!itemObject.isBomb){
+
+        if(itemObject.leftEle.element && !itemObject.leftEle.isBomb){
+			console.log('Left Ele: '+ bombCount++);			
+            workMagic(itemObject.leftEle.element);
+        }
+        if(itemObject.rightEle.element && !itemObject.rightEle.isBomb){
+			console.log('Right Ele: '+ bombCount++);
+            workMagic(itemObject.rightEle.element);
+        }
+        if(itemObject.bottomEle.element && !itemObject.bottomEle.isBomb){
+			console.log('Bottom Ele: '+ bombCount++);
+            workMagic(itemObject.bottomEle.element);
+        }
+    }else{
+		var allBombs = document.getElementsByClassName('bomb');
+		for(var i=0; i < allBombs.length; i++){
+			allBombs.item(i).classList.add('show-bomb');
+		}
+	}
+}
+
+function getItemObject(item){
+	var rowCellArr = item.getAttribute('id').split('_');
     var classArr =  item.classList;
     var row = rowCellArr[0] * 1;
     var cell = rowCellArr[1] * 1;
+	var right = document.getElementById(row+'_'+(cell+1));
+	var left = document.getElementById(row+'_'+(cell+1));
+	var bottom = document.getElementById((row+1)+'_'+cell);
+	var top = document.getElementById((row-1)+'_'+cell);
+	var bottomRight = document.getElementById((row+1)+'_'+(cell+1));
+	var bottomLeft = document.getElementById((row+1)+'_'+(cell-1));
+	var topRight = document.getElementById((row-1)+'_'+(cell+1));
+	var topLeft = document.getElementById((row-1)+'_'+(cell-1));
     var itemObject = 
     {
         eleRow: row,
         eleCell: cell,
         element: document.getElementById(row+'_'+cell) || null,
-        leftEle: document.getElementById(row+'_'+(cell-1)) || null,
-        rightEle: document.getElementById(row+'_'+(cell+1)) || null,
-        bottomEle: document.getElementById((row+1)+'_'+cell) || null,
-        bottomRightEle: document.getElementById((row+1)+'_'+(cell+1)) || null,
-        bottomLeftEle: document.getElementById((row+1)+'_'+(cell-1)) || null,
-        topEle: document.getElementById((row-1)+'_'+cell) || null,
-        topLeftEle: document.getElementById((row-1)+'_'+(cell-1)) || null,
-        topRightEle: document.getElementById((row-1)+'_'+(cell+1)) || null,
+        leftEle: {
+			element: left || null,
+			isBomb: left !== null? left.classList.contains('bomb'): false
+		},
+        rightEle: {
+			element: right || null,
+			isBomb: right !== null? right.classList.contains('bomb'):false
+		},
+        bottomEle: {
+			element: bottom || null,
+			isBomb: bottom !== null? bottom.classList.contains('bomb'): false
+		},
+        bottomRightEle: {
+			element: bottomRight || null,
+			isBomb: bottomRight !== null? bottomRight.classList.contains('bomb'): false
+		},
+        bottomLeftEle: {
+			element: bottomLeft || null,
+			isBomb: bottomLeft !== null? bottomLeft.classList.contains('bomb'): false
+		},
+        topEle: {
+			element: top || null,
+			isBomb: top !== null? top.classList.contains('bomb') : false
+		},
+        topLeftEle: {
+			element: topLeft || null,
+			isBomb: topLeft !== null? topLeft.classList.contains('bomb') : false
+		},
+
+        topRightEle: {
+			element: topRight || null,
+			isBomb: topRight !== null? topRight.classList.contains('bomb'): false
+		},
         isBomb: classArr.contains('bomb')? true: false
     };
 
-	console.log('BoardStructure -> '+ JSON.stringify(itemObject));
-    var bombCount =0;
-    if(!itemObject.isBomb){
-        if(itemObject.leftEle){
-			console.log('Left Ele: '+ bombCount++);
-            workMagic(itemObject.leftEle);
-        }
-        if(itemObject.rightEle){
-			console.log('Right Ele: '+ bombCount++, document.getElementById(row+'_'+(cell+1)));
-            workMagic(itemObject.rightEle);
-        }
-        if(itemObject.bottomEle){
-			console.log('Bottom Ele: '+ bombCount++);
-            workMagic(itemObject.bottomEle);
-        }
-    }    
+	return itemObject;
 }
 
 function getCornerPosition(idxId)

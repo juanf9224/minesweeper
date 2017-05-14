@@ -27,9 +27,11 @@
     border: 2px outset #ddd;
 }
 
-.bomb
+.show-bomb
 {
-
+    background-image: url('../res/img/sprite100.gif');
+    background-position: -64px -39px;
+    border: 1px inset #ddd;
 }
 
 .blank
