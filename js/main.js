@@ -8,10 +8,18 @@ var TOP_BORDER = 'top-border';
 var BOTTOM_BORDER = 'bottom-border';
 
 document.addEventListener('DOMContentLoaded', function(){
-
+	
+	buildBoard(5,8);
 	addElementAttributes();
 	
 });
+
+function buildBoard(rows, cols){
+	var board = [rows, cols];
+	for(var i=0; i< board[0]; i++){
+		
+	}
+}
 
 function addElementAttributes()
 {
@@ -48,9 +56,14 @@ function workMagic(item){
     var itemObject = getItemObject(item);
 
 	console.log('BoardStructure -> '+ JSON.stringify(itemObject));
+	
     var bombCount =0;
     if(!itemObject.isBomb){
+		console.log(itemObject.sides.length);
+		/*for(var i=0; i<itemObject.sides; i++)
+		{	
 
+		}
         if(itemObject.leftEle.element && !itemObject.leftEle.isBomb){
 			console.log('Left Ele: '+ bombCount++);			
             workMagic(itemObject.leftEle.element);
@@ -62,7 +75,7 @@ function workMagic(item){
         if(itemObject.bottomEle.element && !itemObject.bottomEle.isBomb){
 			console.log('Bottom Ele: '+ bombCount++);
             workMagic(itemObject.bottomEle.element);
-        }
+        }*/
     }else{
 		var allBombs = document.getElementsByClassName('bomb');
 		for(var i=0; i < allBombs.length; i++){
@@ -89,39 +102,40 @@ function getItemObject(item){
         eleRow: row,
         eleCell: cell,
         element: document.getElementById(row+'_'+cell) || null,
-        leftEle: {
-			element: left || null,
-			isBomb: left !== null? left.classList.contains('bomb'): false
-		},
-        rightEle: {
-			element: right || null,
-			isBomb: right !== null? right.classList.contains('bomb'):false
-		},
-        bottomEle: {
-			element: bottom || null,
-			isBomb: bottom !== null? bottom.classList.contains('bomb'): false
-		},
-        bottomRightEle: {
-			element: bottomRight || null,
-			isBomb: bottomRight !== null? bottomRight.classList.contains('bomb'): false
-		},
-        bottomLeftEle: {
-			element: bottomLeft || null,
-			isBomb: bottomLeft !== null? bottomLeft.classList.contains('bomb'): false
-		},
-        topEle: {
-			element: top || null,
-			isBomb: top !== null? top.classList.contains('bomb') : false
-		},
-        topLeftEle: {
-			element: topLeft || null,
-			isBomb: topLeft !== null? topLeft.classList.contains('bomb') : false
-		},
-
-        topRightEle: {
-			element: topRight || null,
-			isBomb: topRight !== null? topRight.classList.contains('bomb'): false
-		},
+		sides:[
+				{
+					element: left || null,
+					isBomb: left !== null? left.classList.contains('bomb'): false
+				},
+				{
+					element: right || null,
+					isBomb: right !== null? right.classList.contains('bomb'):false
+				},
+				{
+					element: bottom || null,
+					isBomb: bottom !== null? bottom.classList.contains('bomb'): false
+				},
+				{
+					element: bottomRight || null,
+					isBomb: bottomRight !== null? bottomRight.classList.contains('bomb'): false
+				},
+				{
+					element: bottomLeft || null,
+					isBomb: bottomLeft !== null? bottomLeft.classList.contains('bomb'): false
+				},
+				{
+					element: top || null,
+					isBomb: top !== null? top.classList.contains('bomb') : false
+				},
+				{
+					element: topLeft || null,
+					isBomb: topLeft !== null? topLeft.classList.contains('bomb') : false
+				},
+				{
+					element: topRight || null,
+					isBomb: topRight !== null? topRight.classList.contains('bomb'): false
+				},
+			],
         isBomb: classArr.contains('bomb')? true: false
     };
 
