@@ -10,7 +10,7 @@
 .game-container-style
 {
     background-color: #ddd;
-    width:600px;
+    width:fit-content;
     display: block;
     margin: 0 auto;
     text-align: center;
@@ -21,9 +21,11 @@
     width: 100%;
 }
 
-.cell
-{
-    height: 20px;
+.col
+{   
+    width: 16px;
+    max-width: 16px;
+    height: 16px;
     border: 2px outset #ddd;
 }
 

@@ -9,15 +9,30 @@ var BOTTOM_BORDER = 'bottom-border';
 
 document.addEventListener('DOMContentLoaded', function(){
 	
-	buildBoard(5,8);
+	buildBoard(10,8);
 	addElementAttributes();
 	
 });
 
 function buildBoard(rows, cols){
+	//<td onclick="findBomb(this)" class="cell top-left-corner" id="1_1">
+	//<tr id="1" class="row">
+
 	var board = [rows, cols];
-	for(var i=0; i< board[0]; i++){
-		
+	for(var i=1; i<= board[0]; i++){
+		var trElement = document.createElement('tr');
+		trElement.setAttribute('id', (i));
+		trElement.classList.add('row');
+		var boardElement = document.getElementById('game-table');
+		boardElement.appendChild(trElement);
+		for(var j=1; j<=board[1]; j++){
+			var tdElement = document.createElement('td');
+			tdElement.setAttribute('id', i +'_'+ j);
+			tdElement.setAttribute('onclick', 'findBomb(this)');
+			tdElement.classList.add('col');
+			var tr = document.getElementById(i);
+			tr.appendChild(tdElement);
+		}
 	}
 }
 
@@ -29,20 +44,8 @@ function addElementAttributes()
 			//var indexClass =  (i+1);
 			//row.className += ' '+ indexClass;
 		for(var j = 0; j < rows.item(i).childElementCount; j++){				
-			var cells = rows.item(i).getElementsByClassName('cell');
+			var cells = rows.item(i).getElementsByClassName('col');
 			var cell = cells.item(j);		
-			var structure = {
-				board: [
-				]
-			};
-
-			structure.board.push({
-				cell: {
-					id: '',
-					classess: '',
-					
-				}
-			});
 			setBombsAndBlanks(cell);
 		}
 	}
@@ -55,31 +58,34 @@ function findBomb(item){
 function workMagic(item){
     var itemObject = getItemObject(item);
 
-	console.log('BoardStructure -> '+ JSON.stringify(itemObject));
+	//console.log('BoardStructure -> '+ JSON.stringify(itemObject));
 	
     var bombCount =0;
     if(!itemObject.isBomb){
 		console.log(itemObject.sides.length);
-		/*for(var i=0; i<itemObject.sides; i++)
-		{	
+		var bombCount = 0;
+		for(var s=0; s<itemObject.sides.length; s++){
+			var side = itemObject.sides[s];
+			if(side.element && !side.isBomb){
 
+			}else if(side.element && side.isBomb){
+				console.log(side.element);
+				bombCount++;
+			}
 		}
-        if(itemObject.leftEle.element && !itemObject.leftEle.isBomb){
-			console.log('Left Ele: '+ bombCount++);			
-            workMagic(itemObject.leftEle.element);
-        }
-        if(itemObject.rightEle.element && !itemObject.rightEle.isBomb){
-			console.log('Right Ele: '+ bombCount++);
-            workMagic(itemObject.rightEle.element);
-        }
-        if(itemObject.bottomEle.element && !itemObject.bottomEle.isBomb){
-			console.log('Bottom Ele: '+ bombCount++);
-            workMagic(itemObject.bottomEle.element);
-        }*/
+
+		if(bombCount > 0){			
+			var bombsAround = document.createTextNode(bombCount);
+			itemObject.element.appendChild(bombsAround);
+		}
     }else{
 		var allBombs = document.getElementsByClassName('bomb');
 		for(var i=0; i < allBombs.length; i++){
 			allBombs.item(i).classList.add('show-bomb');
+		}
+		var disableTd = document.getElementsByClassName('col');
+		for(var n=0; n < disableTd.length; n++){
+			disableTd.item(n).removeAttribute('onclick');
 		}
 	}
 }
@@ -90,7 +96,7 @@ function getItemObject(item){
     var row = rowCellArr[0] * 1;
     var cell = rowCellArr[1] * 1;
 	var right = document.getElementById(row+'_'+(cell+1));
-	var left = document.getElementById(row+'_'+(cell+1));
+	var left = document.getElementById(row+'_'+(cell-1));
 	var bottom = document.getElementById((row+1)+'_'+cell);
 	var top = document.getElementById((row-1)+'_'+cell);
 	var bottomRight = document.getElementById((row+1)+'_'+(cell+1));
@@ -165,7 +171,7 @@ function getCornerPosition(idxId)
 
 function getBorderElements(pos)
 {
-	console.log(pos.getAttribute('id')+' end '+ pos.getAttribute('id').endsWith('_1') && !pos.classList.contains(TOP_LEFT_CORNER) && !pos.classList.contains(BOTTOM_LEFT_CORNER));
+	console.log(pos.getAttribute('id')+' end '+ (pos.getAttribute('id').endsWith('_1') && !pos.classList.contains(TOP_LEFT_CORNER) && !pos.classList.contains(BOTTOM_LEFT_CORNER)));
 	if(pos.getAttribute('id').endsWith('_1') && !pos.classList.contains(TOP_LEFT_CORNER) && !pos.classList.contains(BOTTOM_LEFT_CORNER))
 	{	
 		return LEFT_BORDER;
@@ -196,11 +202,7 @@ function setBombsAndBlanks(cell)
 	//console.log(random);			
 	if(random < 25)
 	{
-		cell.className += ' bomb';
-	}
-	else
-	{
-		cell.className += ' blank';
+		cell.classList.add('bomb');
 	}
 }
 
